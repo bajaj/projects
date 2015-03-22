@@ -229,9 +229,11 @@ FakesAssemblies/
 *.out
 *.app
 
-*.vcxproj
+*.vcxproj.filters
 
-stdafx.cpp
-targetver.cpp
+stdafx.h
+targetver.h
 
 ReadMe.txt
+
+*.sln
