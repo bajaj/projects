@@ -237,3 +237,7 @@ targetver.h
 ReadMe.txt
 
 *.sln
+
+stdafx.cpp
+targetver.h
+*.vcxproj
