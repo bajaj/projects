@@ -1,0 +1,82 @@
+struct node
+{
+	node *next;
+	int data;
+
+	node(int x): next(NULL),data(x)
+	{
+
+	}
+
+};
+
+class graph
+{
+	node** adj;
+	int V;        // no of 
+
+   public:
+
+	   graph(int v):V(v)
+	   {
+		   adj=new node*[v];
+
+		   for(int i=0;i<v;i++)
+			   adj[i]=NULL;
+	   }
+
+	   void addnode(node **,int);
+
+	   void addedge(int v,int w)
+	   {
+		   addnode(&(adj[v]),w);
+		   addnode(&(adj[w]),v);
+	   }
+
+	   int v()               // no of vertices
+	   {
+		   return V;
+	   }
+
+	   void count_edge(node *,int&);
+
+	   int E()
+	   {
+		   int count=0;
+		   for(int i=0;i<V;i++)
+			   count_edge(adj[i],count);
+
+		   return count/2;
+	   }
+
+};
+
+
+
+
+
+void graph::count_edge(node *head,int& count)
+{
+	while(head!=NULL)
+	{
+		count++;
+		head=head->next;
+	}
+
+}
+
+void graph::addnode(node **head,int w)
+	   {
+		   if(*(head)==NULL)
+			   *(head)=new node(w);
+				  
+		   else
+			{	   node *temp=*(head);
+
+		         while(temp->next!=NULL)
+					temp=temp->next;
+
+				 temp->next=new node(w);
+	  	   }	
+
+	   }
