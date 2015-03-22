@@ -229,3 +229,9 @@ FakesAssemblies/
 *.out
 *.app
 
+*.vcxproj
+
+stdafx.cpp
+targetver.cpp
+
+ReadMe.txt
