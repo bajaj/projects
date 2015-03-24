@@ -14,16 +14,18 @@
 
 using namespace std;
 
-int arr[10][10] = { 0 };
-vector< pair<int, int> >v;
+int arr[901][901] = { 0 };
+vector< pair<int, int> >v(901);
 
 int pointer = 0; // points to current empty cell
 
+int n;  // no of rows and columns
+
 void initialize()
 {
-	for (int i = 1; i <= 9; i++)
+	for (int i = 1; i <= n; i++)
 	{
-		for (int j = 1; j <= 9; j++)
+		for (int j = 1; j <= n; j++)
 
 		{
 			if (arr[i][j]==0)
@@ -58,7 +60,7 @@ bool checkRow(int no)
 {
 	int row = v[pointer].first;
 
-	for (int j = 1; j <= 9; j++)
+	for (int j = 1; j <= n; j++)
 	{
 		if (arr[row][j] == no)
 			return false;
@@ -71,7 +73,7 @@ bool checkColumn(int no)
 {
 	int column = v[pointer].second;
 
-	for (int i = 1; i <= 9; i++)
+	for (int i = 1; i <= n; i++)
 	{
 		if (arr[i][column] == no)
 			return false;
@@ -83,15 +85,17 @@ bool checkColumn(int no)
 
 bool checkBox(int no)
 {
-	int rowth = ceil(v[pointer].first/3.0);
-	int colth = ceil(v[pointer].second / 3.0);
+	float n_sqrt = sqrt(n);
 
-	int rowStart = (rowth - 1) * 3 + 1;
-	int colStart = (colth - 1) * 3 + 1;
+	int rowth = ceil(v[pointer].first/(float)n_sqrt);
+	int colth = ceil(v[pointer].second / (float)n_sqrt);
 
-	for (int i = rowStart, count = 0; count < 3; count++, i++)
+	int rowStart = (rowth - 1) * n_sqrt + 1;
+	int colStart = (colth - 1) * n_sqrt + 1;
+
+	for (int i = rowStart, count = 0; count < n_sqrt; count++, i++)
 	{
-		for (int j = colStart, countC = 0; countC < 3; countC++, j++)
+		for (int j = colStart, countC = 0; countC < n_sqrt; countC++, j++)
 		{
 			if (arr[i][j] == no)
 				return false;
@@ -104,8 +108,15 @@ bool checkBox(int no)
 bool check(int no)
 {
 	bool x=checkRow(no);
+
+	if (!x) return 0;
+
 	bool y=checkColumn(no);
-	bool z=checkBox(no);
+
+	if (!y) return 0;
+
+	//bool z=checkBox(no);
+	bool z = true;
 
 	if (x && y && z)
 	{
@@ -132,7 +143,7 @@ bool solve()
 	if (isEmpty())
 		return true;
 
-	for (int i = 1; i <= 9; i++)
+	for (int i = 1; i <= n; i++)
 	{
 		bool flag=0;
 
@@ -161,12 +172,12 @@ void sudokuSolver()
 	// write to file
 		//cout << "done";
 
-		for (int i = 1; i <= 9; i++)
+		for (int i = 1; i <= n; i++)
 		{
-			cout << "\n";
-
-			for (int j = 1; j <= 9; j++)
+			for (int j = 1; j <= n; j++)
 				cout << arr[i][j] << " ";
+
+			cout << "\n";
 		}
 
 	
@@ -180,14 +191,16 @@ int _tmain(int argc, _TCHAR* argv[])
 	freopen("input.txt", "r", stdin);
 	freopen("output.txt", "w", stdout);
 
-	int n;
+	int k;
 
-	cout << "enter no of filled cells \n";
-	cin >> n;
+	//cout << "enter no of filled cells \n";
+	cin >> n>>k;
 
-	cout << "enter rowNo columnNo integer \n";
+	n = pow(n, 2);
 
-	for (int i = 0,x,y,no; i < n; i++)
+	//cout << "enter rowNo columnNo integer \n";
+
+	for (int i = 0,x,y,no; i < k; i++)
 	{
 		cin >> x >> y>>no;
 		arr[x][y] = no;
