@@ -44,189 +44,6 @@ int max(int a, int b)
 #define INT_MAX 2147483647 
 
 
-class graph;        // declaration
-
-/*  design pattern
-
-* create a graph object
-*pass the graph to graph processing routine
-* query the graph processing routine for information
-
-eg...
-if we put all the processing in Graph class the it will be very fat so not good design
-
-so create class like Path
-
-
-*/
-
-class graph
-{
-	int V;
-
-public:
-	list<int> *adj;
-
-
-	graph(int x) :V(x)
-	{
-		adj = new list<int>[V];
-	}
-
-	void addedge(int v, int w)
-	{
-		adj[v].push_back(w);
-		adj[w].push_back(v);
-	}
-
-	int v()
-	{
-		return V;
-	}
-
-	int E()                    // no of edges
-	{
-		list<int>::iterator iter;
-
-		int count = 0;
-		for (int i = 0; i<V; i++)
-		{
-			count += adj[i].size();
-		}
-
-		return count / 2;
-	}
-
-	int degree(int v)
-	{
-		return adj[v].size();
-	}
-
-	int maxdegree();
-
-	int self_loop();    // not that necessary
-
-	void print_graph();
-
-	~graph()
-	{
-			delete[] adj;
-	}
-
-};
-
-
-void graph::print_graph()
-{
-	list<int>::iterator iter;
-
-	for (int i = 0; i<V; i++)
-	{
-		for (iter = adj[i].begin(); iter != adj[i].end(); iter++)
-			cout << endl << " " << i << " -> " << (*iter);
-	}
-}
-
-int graph::maxdegree()
-{
-	int max = 0;
-	for (int i = 0; i<V; i++)
-	{
-		if (adj[i].size()>max)
-			max = adj[i].size();
-	}
-	return max;
-}
-
-int graph::self_loop()
-{
-	int count = 0;
-
-	list<int>::iterator iter;
-
-	for (int i = 0; i<V; i++)
-	{
-		for (iter = adj[i].begin(); iter != adj[i].end(); iter++)
-		{
-			if (i == (*iter))
-				count++;
-		}
-	}
-
-	return count / 2;               // because add_edge(0,0)  will add two 0 to the adj[0]
-}
-
-
-
-
-// *****************************************///////
-
-class connected_components
-{
-	int* marked;
-	int* id;
-	int count;
-
-public:
-	connected_components(graph& g);
-	void dfs(graph& g, int s);
-	int cout();
-	int my_cc(int v);
-
-	~connected_components()
-	{
-			delete[] marked;
-			delete[] id;
-	}
-
-};
-
-connected_components::connected_components(graph& g) :count(0)
-{
-	marked = new int[g.v()];
-	id = new int[g.v()];
-
-	for (int i = 0; i<g.v(); i++)
-	{
-		marked[i] = 0;
-	}
-	for (int i = 0; i<g.v(); i++)
-	{
-		if (!marked[i])
-		{
-			dfs(g, i);
-			count++;
-		}
-
-	}
-}
-
-void connected_components::dfs(graph& g, int s)
-{
-	marked[s] = 1;
-	list<int>::iterator iter;
-
-	id[s] = count;
-
-	for (iter = (g.adj[s]).begin(); iter != (g.adj[s]).end(); iter++)
-	{
-		if (!marked[*iter])
-			dfs(g, *iter);
-	}
-
-}
-
-int connected_components::cout()
-{
-	return count;
-}
-
-int connected_components::my_cc(int x)
-{
-	return id[x];
-
-}
-
 int min(int a, int b)
 {
 	return a > b ? b : a;
@@ -238,7 +55,7 @@ int dp[200001][201];
 int s[201];
 int M[201];
 int id[201];
-
+int mini[201];
 int m;
 
 bool find(int p, int q)
@@ -279,6 +96,7 @@ int main()
 		cin >> m >> k >> n;
 
 	//	graph g(m + 1);
+		int counts = 0; // no of different letter in 
 
 		REP(i, k)
 		{
@@ -287,10 +105,13 @@ int main()
 			
 		//	g.addedge(x, y);
 			unite(x, y);
+
+			M[x] = 1;
+			M[y] = 1;
+
 		}
 
-		int counts = 0; // no of different letter in 
-
+		
 		REP(i, n)
 		{
 			cin >> arr[i];
@@ -303,23 +124,33 @@ int main()
 				s[counts++] = i;
 		}
 
-		connected_components cc(g);
+	//	connected_components cc(g);
 		
 //		cc.my_cc(1);
 
-		
+		//int mini=0;
+	//	int minino = INT_MAX;
+
+		mini[0] = INT_MAX;
+
 			REP(j, counts)
 			{
 				int ans;
 
 				if (arr[0] == s[j])
 					ans = 0;
-				else if (cc.my_cc(arr[0]) == cc.my_cc(s[j]))
+				else if (find(arr[0],s[j]))
 					ans = 1;
 				else
 					ans = INT_MAX;
 				
 				dp[0][j] = ans;
+
+				if (j == 0)
+					mini[j] = dp[0][j];
+				else
+					mini[j] = min(mini[j - 1], dp[0][j]);
+
 			}
 		
 
@@ -327,10 +158,11 @@ int main()
 		{
 			REP(j, counts)
 			{
-				int ans;
+				int ans,ans2;
+
 				if (arr[i] == s[j])
 					ans = 0;
-				else if (cc.my_cc(arr[i]) == cc.my_cc(s[j]))
+				else if (find(arr[i], s[j]))
 					ans = 1;
 				else
 					ans = INT_MAX;
@@ -338,7 +170,19 @@ int main()
 
 				dp[i][j] = INT_MAX;
 
-				for (int k = j; k >= 0; k--)
+				if (ans == INT_MAX || mini[j] == INT_MAX)
+					ans2 = INT_MAX;
+				else
+					ans2 = ans + mini[j];
+
+				dp[i][j] = ans2;
+
+				if (j == 0)
+					mini[j] = dp[i][j];
+				else
+					mini[j] = min(mini[j - 1], dp[i][j]);
+
+				/*for (int k = j; k >= 0; k--)
 				{
 					int ans2;
 
@@ -348,7 +192,7 @@ int main()
 						ans2 = dp[i - 1][k] + ans;
 
 					dp[i][j] = min(dp[i][j], ans2);
-				}
+				}*/
 
 			}
 
