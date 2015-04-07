@@ -50,11 +50,11 @@ int min(int a, int b)
 }
 
 
-int arr[200001];
-int dp[200001][201];
-int s[201];
-int M[201];
-int id[201];
+short arr[200001];
+int dp[201];
+short s[201];
+short M[201];
+short id[201];
 int mini[201];
 int m;
 
@@ -81,7 +81,7 @@ int main()
 
     #pragma warning (disable : 4996)
 	freopen("input.txt", "r", stdin);
-	freopen("output.txt", "w", stdout);
+	freopen("output2.txt", "w", stdout);
 
 	int  k, n;
 
@@ -144,12 +144,12 @@ int main()
 				else
 					ans = INT_MAX;
 				
-				dp[0][j] = ans;
+				dp[j] = ans;
 
 				if (j == 0)
-					mini[j] = dp[0][j];
+					mini[j] = dp[j];
 				else
-					mini[j] = min(mini[j - 1], dp[0][j]);
+					mini[j] = min(mini[j - 1], dp[j]);
 
 			}
 		
@@ -168,19 +168,19 @@ int main()
 					ans = INT_MAX;
 				
 
-				dp[i][j] = INT_MAX;
+				dp[j] = INT_MAX;
 
 				if (ans == INT_MAX || mini[j] == INT_MAX)
 					ans2 = INT_MAX;
 				else
 					ans2 = ans + mini[j];
 
-				dp[i][j] = ans2;
+				dp[j] = ans2;
 
 				if (j == 0)
-					mini[j] = dp[i][j];
+					mini[j] = dp[j];
 				else
-					mini[j] = min(mini[j - 1], dp[i][j]);
+					mini[j] = min(mini[j - 1], dp[j]);
 
 				/*for (int k = j; k >= 0; k--)
 				{
@@ -202,7 +202,7 @@ int main()
 
 		REP(j, counts)
 		{
-			best = min(best, dp[n - 1][j]);
+			best = min(best, dp[j]);
 		}
 
 		if (best == INT_MAX)
