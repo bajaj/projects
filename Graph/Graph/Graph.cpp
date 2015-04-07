@@ -31,8 +31,6 @@ so create class like Path
 
 class graph
 {
-	
-	
 	int V;
 
 	public:
@@ -41,7 +39,7 @@ class graph
 
 	graph(int x):V(x)
 	{
-		adj=new list<int>[x];
+		adj=new list<int>[V];
 	}
 
 	void addedge(int v,int w)
@@ -78,6 +76,12 @@ class graph
 	int self_loop();    // not that necessary
 
 	void print_graph();
+
+	~graph()
+	{
+
+	}
+
 };
 
 
@@ -248,6 +252,62 @@ int graph::self_loop()
 	return count/2;               // because add_edge(0,0)  will add two 0 to the adj[0]
 }
 
+class biPartite           // two colorable
+{
+	bool* color;
+	bool* marked;
+	bool isTwoColorable;
+
+public:
+	biPartite(graph& g)
+	{
+		color = new bool[g.v()];
+		marked = new bool[g.v()];
+		isTwoColorable = true;
+
+		for (int i = 0; i < g.v(); i++)
+		{
+			color[i] = 0;
+			marked[i] = 0;
+		}
+		       // color the first node
+
+		for (int i = 0; i < g.v(); i++)
+		{
+			if (!marked[i])
+				dfs(g, i);
+		}
+
+		if (isTwoColorable)   // start from 1st node
+			cout << "\n Yes it is bipartite";
+		else
+			cout << "\n No it is not";
+	}
+
+	void dfs(graph& g,int node)     // col is color of adjacent vertex
+	{
+		marked[node] = 1;
+
+		list<int>::iterator iter;
+
+		for (iter = (g.adj[node]).begin(); iter != g.adj[node].end(); iter++)
+		{
+			if (!marked[*iter])
+			{
+				color[*iter] = !color[node];
+				dfs(g, *iter);
+			}
+			else if (color[*iter] == color[node])
+				isTwoColorable = false;
+			
+		}
+
+		
+	}
+
+};
+
+
 // *****************************************///////
 
 class connected_components
@@ -402,18 +462,18 @@ public:
 int _tmain(int argc, _TCHAR* argv[])
 { 
 
-	graph g(7);
+	graph g(4);
 
 	g.addedge(0,1);
-g.addedge(0,6);
-	g.addedge(1,2);
+    g.addedge(1,2);
 	g.addedge(2,3);
-	g.addedge(2,4);
-	g.addedge(4,5);
-	g.addedge(5,6);
+	g.addedge(3,0);
+	g.addedge(2,0);
+	//g.addedge(4,5);
+	//g.addedge(5,6);
 
 	//cout<<*((g.adj[0]).begin());
-	g.addedge(4,6);
+//	g.addedge(4,6);
 	//g.addedge(3,1);
 //	g.addedge(8,9);
 
@@ -426,9 +486,12 @@ g.addedge(0,6);
 
 	g.print_graph();
 
-	cycle c(g);
+	biPartite b(g);
 
-	cout << c.hascycle;
+
+//	cycle c(g);
+
+	//cout << c.hascycle;
 
 //	connected_components cc(g);
 
