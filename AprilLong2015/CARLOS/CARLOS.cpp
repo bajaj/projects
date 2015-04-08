@@ -1,8 +1,6 @@
 // CARLOS.cpp : Defines the entry point for the console application.
 //
 
-// Graph.cpp : Defines the entry point for the console application.
-//
 
 #include "stdafx.h"
 

@@ -58,5 +58,17 @@ int main()
 	freopen("input.txt", "r", stdin);
 	freopen("output.txt", "w", stdout);
 	
+
+	// calculate the timing
+	#include <windows.h>
+	DWORD dw1 = GetTickCount();
+	// do something
+	DWORD dw2 = GetTickCount();
+	cout << "Time difference is " << (dw2 - dw1) / 1000 << " Seconds" << endl;
+
+
+
+
+
 	return 0;
 }
