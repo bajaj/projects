@@ -2,7 +2,11 @@
 #include "stdafx.h"
 
 #include <iostream>
-#include <math>
+#include "math.h"
+#include<vector>
+#include<string>
+#include<algorithm>
+
 using namespace std;
 
 #ifdef _MSC_VER
@@ -27,6 +31,11 @@ typedef long long int LL;
 int max(int a,int b)
 {
 return a>b?a:b;
+}
+
+int min(int a, int b)
+{
+	return a < b ? a : b;
 }
 
 #include<cstdio>

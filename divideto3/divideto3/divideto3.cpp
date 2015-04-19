@@ -81,7 +81,9 @@ int main()
 		maxi = max(arr[i], maxi);
 	}
 
-	int dp[1201] = { 0 };
+	set(0, 0, 0, 0);
+
+	/*int dp[1201] = { 0 };
 
 	avg = ceil(sum / 3.0);
 
@@ -115,6 +117,9 @@ int main()
 
 
 	cout << S1;
+	*/
+
+	cout << ans;
 
 	return 0;
 }
