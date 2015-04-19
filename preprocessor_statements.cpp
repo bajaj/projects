@@ -2,6 +2,7 @@
 #include "stdafx.h"
 
 #include <iostream>
+#include <math>
 using namespace std;
 
 #ifdef _MSC_VER
@@ -18,7 +19,7 @@ typedef long long int LL;
 #define FOR(i,a,b) for(int i=a;i<=b;i++)
 #define FORD(i,a,b) for(int i=a;i>=b;i--)
 #define REP(i,n) for(int i=0;i<n;i++)
-
+#define rdarr(a,n) REP(i,n) cin >> a[i];
 
 #define cscanf(x) scanf("%d", &x)
 #define cprintf(x) printf(" %d \n", x)
