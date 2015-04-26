@@ -39,13 +39,14 @@ int min(int a, int b)
 	return a < b ? a : b;
 }
 
-int inv = 0;
+LL inv = 0;
+LL arr[200001],aux[200001];
 
-void merge(int left, int mid, int right, int arr[])
+
+void merge(int left, int mid, int right)
 {
-	int len = right - left + 1;
+	LL len = right - left + 1;
 
-	int* aux = new int[len];
 
 	for (int i = left,j=0; i <= right; i++,j++)
 		aux[j] = arr[i];
@@ -68,28 +69,22 @@ void merge(int left, int mid, int right, int arr[])
 	}
 
 	while (l < leftCount)
-	{
 		arr[index++] = aux[l++];
-	}
-
-
+	
 
 	while (r < len)
 		arr[index++] = aux[r++];
-
-	delete aux;
-
 }
 
-void mergeSort(int left, int right, int arr[])
+void mergeSort(int left, int right)
 {
 	int mid = (left + right) / 2;
 
 	if (right > left)
 	{
-		mergeSort(left, mid, arr);
-		mergeSort(mid + 1, right, arr);
-		merge(left, mid, right, arr);
+		mergeSort(left, mid);
+		mergeSort(mid + 1, right);
+		merge(left, mid, right);
 	}
 
 	
@@ -105,20 +100,16 @@ int main()
 		freopen("output.txt", "w", stdout);
 
 		int n;
-		int arr[20];
-
-		cin >> n;
-
-		rdarr(arr, n);
-	
-		mergeSort(0,n-1, arr);
-
-		REP(i, n)
+		int space;
+		DRT()
 		{
-			cout << arr[i] << " ";
-			
+			inv = 0;
+			cin >> n;
+			rdarr(arr, n);
+			mergeSort(0, n - 1);
+
+			cout << inv<<"\n";
 		}
-		cout << "\n" << inv;
 
 	return 0;
 }
