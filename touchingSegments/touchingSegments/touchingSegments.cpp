@@ -184,41 +184,41 @@ int main()
 
 		FOR(i, 1, n)
 		{
-			count[compress[i][0]]++;
-			count[compress[i][1]+1]--;
+			count[arr[i][0]]++;
+			count[arr[i][1]+1]--;
 		}
 
 		int maxA = 0;
 		int maxAIndex = 0;
 
-		FOR(i, 1, index+1)
+		FOR(i, 1, 500)
 			count[i] += count[i - 1];
 		
 
-		maxIndexCount(count, maxAIndex, maxA, index+1);
+		maxIndexCount(count, maxAIndex, maxA, 500);
 
-		FOR(i, 1, index+1)
+		FOR(i, 1, 500)
 			count[i] = 0;
 		
 
 		FOR(i, 1, n)
 		{
-			if (maxAIndex >= compress[i][0] && maxAIndex <= compress[i][1]);			
+			if (maxAIndex >= arr[i][0] && maxAIndex <= arr[i][1]);			
 			else
 			{
-				count[compress[i][0]]++;
-				count[compress[i][1] + 1]--;
+				count[arr[i][0]]++;
+				count[arr[i][1] + 1]--;
 			}
 		}
 
-		FOR(i, 1, index+1)
+		FOR(i, 1, 500)
 			count[i] += count[i - 1];
 		
 
 		int maxB = 0;
 		int maxBIndex = 0;
 
-		maxIndexCount(count, maxBIndex, maxB, index+1);
+		maxIndexCount(count, maxBIndex, maxB, 500);
 
 		cout <<"Case "<<t<<": "<< maxA + maxB << "\n";
 		t++;
