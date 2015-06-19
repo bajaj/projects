@@ -4,6 +4,7 @@
 
 #include "stdafx.h"
 #include "iostream"
+#include "algorithm"
 using namespace std;
 
 #ifdef _MSC_VER
@@ -24,12 +25,12 @@ typedef long long int LL;
 
 
 #define LSB(x) ( x & -x)
-#define logSize 7
+#define logSize 10
 
-int tree[(1 << logSize) + 1];
+LL tree[(1 << logSize) + 1];
 int n = (1 << logSize);
 
-void update(int index, int value)
+void update(int index, LL value)
 {
 	while (index <= n)
 	{
@@ -38,9 +39,9 @@ void update(int index, int value)
 	}
 }
 
-int get(int index)       // get an cumulative frequency
+LL get(int index)       // get an cumulative frequency
 {
-	int sum = 0;
+	LL sum = 0;
 
 	while (index > 0)
 	{
@@ -83,10 +84,25 @@ int getIndex(int cumFreq)
 	return idx;
 }
 
+pair<int, int> pi[1001],a[1001];
+
+//int a[1001], b[1001];
+
+int index[10001];
 
 int main()
 {
-	FOR(i,1,100)
+
+	inp_s; cinnull;
+
+	#pragma warning (disable : 4996)
+	//freopen("input.txt", "r", stdin);
+
+	freopen("A-large-practice.in", "r", stdin);
+
+	freopen("output.out", "w", stdout);
+
+	/*FOR(i,1,100)
 		update(i, i);
 
 	
@@ -94,7 +110,57 @@ int main()
 
 	cout << "\n" << getIndex(get(24));
 
-	cout << "\n" << getIndividualfreq(3);
+	cout << "\n" << getIndividualfreq(3*/
+	int caseId = 1;
+
+	DRT()
+	{
+		
+		LL ans = 0;
+
+		cin >> n;
+
+		REP(i, n)
+		{
+			cin >> pi[i].first;
+			cin >> pi[i].second;
+			
+			tree[i + 1] = 0;
+
+		}
+
+	sort(pi, pi + n);
+
+		REP(i, n)
+		{
+			a[i].first= pi[i].second;
+			a[i].second = i + 1;
+		}
+
+		sort(a, a + n);
+
+		REP(i, n)
+		{
+			index[a[i].first] = i + 1;
+		}
+
+		REP(i, n)
+		{
+			a[i].second = index[pi[i].second];
+		}
+
+		FORD(i, n - 1, 0)
+		{
+			
+			ans += get(a[i].second);
+			update(a[i].second,1);
+		}
+
+		cout << "Case #" << caseId << ":" << " " << ans << "\n";
+		caseId++;
+	}
+
+
 
 	return 0;
 }

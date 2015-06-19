@@ -1,4 +1,4 @@
-// P3.cpp : Defines the entry point for the console application.
+// CBARG.cpp : Defines the entry point for the console application.
 //
 
 //#include <bits/stdc++.h>
@@ -19,7 +19,17 @@ using namespace std;
 #define inp_s ios_base::sync_with_stdio(false)
 #define cinnull cin.tie(NULL)
 
+// Common memset settings
+//memset(memo, -1, sizeof memo); // initialize DP memoization table with -1
+//memset(arr, 0, sizeof arr); // to clear array of integers
+
 typedef long long int LL;
+
+typedef pair<int, int> ii;
+typedef vector<int> vi;
+typedef vector<ii> vii;
+
+// vector<vii> AdjList;    // graph representation
 
 
 #define DRT() int test_case; cin>>test_case;while(test_case--)
@@ -41,63 +51,40 @@ int min(int a, int b)
 	return a < b ? a : b;
 }
 
-LL a[100001];
+
 
 int main()
 {
 	inp_s; cinnull;
 
-	#pragma warning (disable : 4996)
+#pragma warning (disable : 4996)
 	freopen("input.txt", "r", stdin);
 	freopen("output.txt", "w", stdout);
-
 
 	DRT()
 	{
 		int n;
+		LL x,y;
+		LL ans = 0;
+
+		x = 0;
+
 		cin >> n;
-		int minCount = 0,maxCount=0;
 
 		REP(i, n)
 		{
-			cin >> a[i];
+			cin >> y;
+
+			if (y - x >= 0)
+				ans += y - x;
+			
+			x = y;
 		}
 
-		sort(a, a + n);
-
-		int i = 0;
-
-		while (i < n)
-		{
-			if ((i + 1 < n) && a[i] == a[i + 1] - 1)
-			{
-				if ((i + 2 < n) && a[i + 1] == a[i + 2] - 1)
-					i += 3;
-				else
-					i += 2;
-			}
-			else
-				i++;
-		
-			minCount++;
-		}
-	
-		i = 0;
-
-
-		while (i < n)
-		{
-			if ((i + 1 < n) && a[i] == a[i + 1] - 1)			
-					i += 2;
-			else
-				i++;
-
-			maxCount++;
-		}
-
-		cout << minCount <<" "<<maxCount<< "\n";
+		cout << ans << "\n";
 
 	}
+
 
 
 	return 0;

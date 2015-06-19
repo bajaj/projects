@@ -1,3 +1,6 @@
+// PALINQUE.cpp : Defines the entry point for the console application.
+//
+
 //#include <bits/stdc++.h>
 #include "stdafx.h"
 
@@ -38,9 +41,9 @@ typedef vector<ii> vii;
 #define cscanf(x) scanf("%d", &x)
 #define cprintf(x) printf(" %d \n", x)
 
-int max(int a,int b)
+int max(int a, int b)
 {
-return a>b?a:b;
+	return a>b ? a : b;
 }
 
 int min(int a, int b)
@@ -48,47 +51,56 @@ int min(int a, int b)
 	return a < b ? a : b;
 }
 
-#include<cstdio>
-inline void fastRead_int(int &x) {
-	register int c = getchar_unlocked();
-	x = 0;
-	int neg = 0;
 
-	for (; ((c<48 || c>57) && c != '-'); c = getchar_unlocked());
+LL dp[5000][5000];
+bool palindrome[5000][5000];
 
-	if (c == '-') {
-		neg = 1;
-		c = getchar_unlocked();
-	}
-
-	for (; c>47 && c<58; c = getchar_unlocked()) {
-		x = (x << 1) + (x << 3) + c - 48;
-	}
-
-	if (neg)
-		x = -x;
-}
-
-   	
 int main()
-{	
-	inp_s;cinnull;
-
+{
+	inp_s; cinnull;
+//	memset(dp, 0, sizeof dp);
 	#pragma warning (disable : 4996)
 	freopen("input.txt", "r", stdin);
 	freopen("output.txt", "w", stdout);
+
+	string str;
+	cin >> str;
+	int length = str.length();
+
+	REP(i, length - 1)        // for every 2 letter 
+	{
+		dp[i][i] = palindrome[i][i] = 1;
+		palindrome[i][i + 1] = (str[i] == str[i + 1]);
+
+		dp[i][i + 1] = 2 + palindrome[i][i + 1];
+	}
+
+	palindrome[length - 1][length - 1] = dp[length-1][length-1]=1;
 	
+	for (int j = 2; j < length; j++)   // from length 2 to length     
+	{
+		for (int i = 0; i + j < length; i++)     // starting from every vertex
+		{
+			int l, r;
+			l = i;
+			r = i + j;
 
-	// calculate the timing
-	#include <windows.h>
-	DWORD dw1 = GetTickCount();
-	// do something
-	DWORD dw2 = GetTickCount();
-	cout << "Time difference is " << (dw2 - dw1) / 1000 << " Seconds" << endl;
+			palindrome[l][r] = (palindrome[l + 1][r - 1] && (str[l] == str[r]));
+			dp[l][r] = dp[l + 1][r] + dp[l][r - 1] - dp[l+1][r - 1]+palindrome[l][r];   // inclusion exclusion theorem
+		}
 
+	}
 
+	DRT()
+	{
+		int x, y;
+		cin >> x >> y;
 
+		cout << dp[x - 1][y - 1] << "\n";
+		
+	}
 
 
 	return 0;
 }
+

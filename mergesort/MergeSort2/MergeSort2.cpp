@@ -99,24 +99,29 @@
 			freopen("input.txt", "r", stdin);
 			freopen("output.txt", "w", stdout);
 
-			int n;
-		
-		
+			int caseId = 1;
+
+			DRT()
+			{
+				int n;
+
 				inv = 0;
 				cin >> n;
-			
+
 				REP(i, n)
 				{
 					cin >> arr[i].first;
 					cin >> arr[i].second;
 				}
 
-				sort(arr,arr+n);
+				sort(arr, arr + n);
 
 				mergeSort(0, n - 1);
 
-				cout << inv;
-		
+				cout << "Case #" << caseId << ":" << " " << inv << "\n";
+				caseId++;
+			}
+
 
 		return 0;
 	}
