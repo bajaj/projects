@@ -26,7 +26,8 @@ typedef pair<int, int> ii;
 typedef vector<int> vi;
 typedef vector<ii> vii;
 
-// vector<vii> AdjList;    // graph representation
+vector<vii> AdjList;    // graph representation
+vector< pair<int, ii> > EdgeList;   // edgeList for kruskal algorithm
 
 
 #define DRT() int test_case; cin>>test_case;while(test_case--)
@@ -76,7 +77,7 @@ int main()
 
 	#pragma warning (disable : 4996)
 	freopen("input.txt", "r", stdin);
-	freopen("output.txt", "w", stdout);
+	//freopen("output.txt", "w", stdout);
 	
 
 	// calculate the timing
