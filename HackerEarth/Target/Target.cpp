@@ -49,35 +49,69 @@ int min(int a, int b)
 	return a < b ? a : b;
 }
 
+LL arthi(LL a1, LL n, LL d)
+{
+	LL an = (a1 + (n - 1)*d);
+
+	return n*(a1 + an) / 2;
+
+}
+
 
 int main()
 {
 	inp_s; cinnull;
 
-	#pragma warning (disable : 4996)
-	freopen("input.txt", "r", stdin);
+#pragma warning (disable : 4996)
+freopen("input.txt", "r", stdin);
 	//freopen("output.txt", "w", stdout);
-	
-	string s;
-	int arr[10001];
-	int count = 0;
-	
-	cin >> s;
 
-	int len = s.length();
+int arrc[] = { 91, 81, 61, 7 };
+int arrop[] = { 99, 82, 98 };
+int arrno[] = { 77760311 };
 
-	for (int i = len - 1; i >= 0; i--)
+cout << 96 << "\n";
+
+int count = 0;
+for (int bitmask = 0; bitmask <= 7; bitmask++)
+{
+	int country = (bitmask)&(1 << 2);
+	int op = (bitmask)&(1 << 1);
+	int no = (bitmask)&(1);
+
+	int in = 4, jn = 3, jk = 1;
+	
+
+	REP(i,in)
+		REP(j,jn)
+		REP(k, jk)
 	{
-		char c = s[i];
-		int x = c - '0';
-		if (x % 2 == 0)
-			count++;
-		arr[i] = count;
+		//count++;
+		if (country)
+			cout << arrc[i];
+		else
+			cout << 21;
+
+		cout << " ";
+
+		if (op)
+			cout << arrop[j];
+		else
+			cout << 55;
+
+		if (no)
+			cout << arrno[k];
+		else
+			cout << "a" << 1234567;
+		
+		cout << "\n";
 	}
 
-	REP(i, len)
-		cout << arr[i] << " ";
+	//cout << count;
+}
 
+
+	
 	return 0;
 }
 
