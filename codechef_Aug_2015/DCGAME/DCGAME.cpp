@@ -60,34 +60,35 @@ int min(int a, int b)
 	return a < b ? a : b;
 }
 
-pair<unsigned int, unsigned int> arr[1000005];
-unordered_map<unsigned int, unsigned int> check;
-int counti[1000005];
+pair<LL, LL> arr[1000005];
+pair<LL, LL> arr2[1000005];
+
+LL counti[1000005];
 
 void populateCount(int point)
 {
 	counti[0] = 0;
 	FOR(i, 1, point)
-		counti[i] = arr[i].second + counti[i - 1];
+		counti[i] = arr2[i].second + counti[i - 1];
 
 }
 
-int binarySearch(unsigned int k,int size)
+int binarySearch(LL k,int size)
 {
 	int low = 1,high = size,mid;
 	int index = -1;
 
-	while (low != high)
+	while (low <= high)
 	{
 		mid = (low + high) / 2;
 
-		if (arr[mid].first == k)
+		if (arr2[mid].first == k)
 		{
 			index = mid;
 			break;
 		}
 
-		if (arr[mid].first > k)
+		if (arr2[mid].first > k)
 			high = mid - 1;
 		else
 			low = mid + 1;
@@ -101,7 +102,21 @@ int binarySearch(unsigned int k,int size)
 
 }
 
-#include <windows.h>
+int removeDuplicates(int n)
+{
+	int j = 1;
+	FOR(i, 1, n)
+	{
+		if (arr[i].first == arr[i - 1].first)
+			arr2[j-1].second += arr[i].second;
+		else
+			arr2[j++] = arr[i];
+		
+	}
+	return j;
+}
+
+//#include <windows.h>
 
 int main()
 {
@@ -114,36 +129,30 @@ int main()
 	int n, m;
 	cin >> n>>m;
 
-	unsigned int point = 1,x,value;
+	LL point = 1,x,value;
 	
-	DWORD dw1 = GetTickCount();
+	//DWORD dw1 = GetTickCount();
 	// do something
 	
 	FOR(i,1,n)
 	{
-		cin >> x;
-		value = check[x];
-		if (!value)
-		{
-			arr[point].first = x;
-			arr[point].second = i;
-
-			check[x] = point;
-			point++;
-		}
-		else
-			arr[value].second += i;
+		cin >> arr[i].first;
+		arr[i].second = 1;
 		
+		if (arr[i].first >= arr[i - 1].first)
+			arr[i].second += arr[i - 1].second;		
 	}
 
-	sort(arr+1, arr+point);
+	sort(arr+1, arr+n);
 
-	point--;
+	int no=removeDuplicates(n);
+
+	point = no - 1;
 	populateCount(point);
 
 	char comp,
 		player;
-	unsigned int k;
+	LL k;
 	
 
 	REP(i, m)
@@ -151,25 +160,25 @@ int main()
 		cin >> comp >> k >> player;
 
 		int index = binarySearch(k, point);
-		int Nocount = 0;
+		LL Nocount = 0;
 
 		if (comp == '=')
 		{
-			if (arr[index].first == k)
+			if (arr2[index].first == k)
 				Nocount = counti[index]-counti[index-1];
 			else
 				Nocount = 0;
 		}
 		else if (comp == '>')
 		{
-			if (arr[index].first <= k)
+			if (arr2[index].first <= k)
 				Nocount = counti[point] - counti[index];
 			else
 				Nocount = counti[point]- counti[index - 1];
 		}
 		else if (comp == '<')
 		{
-			if (arr[index].first >= k)
+			if (arr2[index].first >= k)
 				Nocount = counti[index-1];
 			else
 				Nocount = counti[index];
@@ -186,8 +195,8 @@ int main()
 			cout << player;
 	}
 
-	DWORD dw2 = GetTickCount();
-	cout << "Time difference is " << (float)(dw2 - dw1) / 1000 << " Seconds" << endl;
+//	DWORD dw2 = GetTickCount();
+	//cout << "Time difference is " << (float)(dw2 - dw1) / 1000 << " Seconds" << endl;
 
 	return 0;
 }
