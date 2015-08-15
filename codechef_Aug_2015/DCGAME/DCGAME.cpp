@@ -17,7 +17,8 @@
 #include<algorithm>
 #include <map>
 #include <unordered_map>
-
+#include<stack>
+#include<array>
 
 using namespace std;
 
@@ -34,7 +35,7 @@ using namespace std;
 
 typedef unsigned long long LL;
 
-typedef pair<int, int> ii;
+typedef pair<LL, LL> ii;
 typedef vector<int> vi;
 typedef vector<ii> vii;
 
@@ -50,9 +51,11 @@ typedef vector<ii> vii;
 #define cscanf(x) scanf("%d", &x)
 #define cprintf(x) printf(" %d \n", x)
 
+
+
 int max(int a, int b)
 {
-	return a>b ? a : b;
+	return a > b ? a : b;
 }
 
 int min(int a, int b)
@@ -60,10 +63,13 @@ int min(int a, int b)
 	return a < b ? a : b;
 }
 
-pair<LL, LL> arr[1000005];
 pair<LL, LL> arr2[1000005];
 
 LL counti[1000005];
+
+array<LL, 4> a[1000005];   // element,iprev,inext,count
+stack <ii> s;
+
 
 void populateCount(int point)
 {
@@ -73,9 +79,9 @@ void populateCount(int point)
 
 }
 
-int binarySearch(LL k,int size)
+int binarySearch(LL k, int size)
 {
-	int low = 1,high = size,mid;
+	int low = 1, high = size, mid;
 	int index = -1;
 
 	while (low <= high)
@@ -107,11 +113,11 @@ int removeDuplicates(int n)
 	int j = 1;
 	FOR(i, 1, n)
 	{
-		if (arr[i].first == arr[i - 1].first)
-			arr2[j-1].second += arr[i].second;
+		if (a[i][0] == a[i - 1][0])
+			arr2[j - 1].second += a[i][3];
 		else
-			arr2[j++] = arr[i];
-		
+			arr2[j++] = ii(a[i][0],a[i][3]);
+
 	}
 	return j;
 }
@@ -127,33 +133,55 @@ int main()
 	//	freopen("output.txt", "w", stdout);
 
 	int n, m;
-	cin >> n>>m;
+	cin >> n >> m;
 
-	LL point = 1,x,value;
-	
 	//DWORD dw1 = GetTickCount();
 	// do something
-	
-	FOR(i,1,n)
+
+	FOR(i, 1, n)
+		cin >> a[i][0];
+
+	a[0][0] = 1000000009;
+	a[n + 1][0] = 1000000009;
+
+	s.push(ii(a[0][0], 0));
+
+	int x = 1;
+
+	ii ele = s.top();
+
+	while (x <= n + 1)   // since a[n+1][0]is maxi
 	{
-		cin >> arr[i].first;
-		arr[i].second = 1;
-		
-		if (arr[i].first >= arr[i - 1].first)
-			arr[i].second += arr[i - 1].second;		
+		ele = s.top();
+		while (ele.first <= a[x][0])
+		{
+			a[ele.second][2] = x;  // setting inext
+			a[ele.second][3] = (ele.second - a[ele.second][1]) * (a[ele.second][2] - ele.second);
+			
+			if (!s.empty())
+					s.pop();
+			if (!s.empty())
+				ele = s.top();
+			else
+				break;
+		}
+
+		a[x][1] = ele.second; // seeting iprev
+		s.push(ii(a[x][0], x));   // elem,index
+		x++;
 	}
 
-	sort(arr+1, arr+n);
+	sort(a + 1, a + n + 1);
 
-	int no=removeDuplicates(n);
+	int no = removeDuplicates(n);
 
-	point = no - 1;
+	int point = no - 1;
 	populateCount(point);
 
 	char comp,
 		player;
 	LL k;
-	
+
 
 	REP(i, m)
 	{
@@ -165,7 +193,7 @@ int main()
 		if (comp == '=')
 		{
 			if (arr2[index].first == k)
-				Nocount = counti[index]-counti[index-1];
+				Nocount = counti[index] - counti[index - 1];
 			else
 				Nocount = 0;
 		}
@@ -174,12 +202,12 @@ int main()
 			if (arr2[index].first <= k)
 				Nocount = counti[point] - counti[index];
 			else
-				Nocount = counti[point]- counti[index - 1];
+				Nocount = counti[point] - counti[index - 1];
 		}
 		else if (comp == '<')
 		{
 			if (arr2[index].first >= k)
-				Nocount = counti[index-1];
+				Nocount = counti[index - 1];
 			else
 				Nocount = counti[index];
 		}
@@ -195,7 +223,7 @@ int main()
 			cout << player;
 	}
 
-//	DWORD dw2 = GetTickCount();
+	//	DWORD dw2 = GetTickCount();
 	//cout << "Time difference is " << (float)(dw2 - dw1) / 1000 << " Seconds" << endl;
 
 	return 0;

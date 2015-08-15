@@ -53,77 +53,54 @@ int min(int a, int b)
 	return a < b ? a : b;
 }
 
-int ri[] = { -1, 1, 0, 0 };
-int ci[] = { 0, 0, 1, -1 };
 
-int mat[101][101];
-
-#define maxi 5000
 
 int main()
 {
 	inp_s; cinnull;
 
-#pragma warning (disable : 4996)
+	#pragma warning (disable : 4996)
 	freopen("input.txt", "r", stdin);
 
-	int r, c, qi;
-	cin >> r >> c >> qi;
 
-		REP(i, r)
-			REP(j, c)
-			cin >> mat[i][j];
-		
-		bool isBlack[101][101];
+	DRT()
+	{
+		int n;
+		int arr[20];
+		int ans[20];
 
-		while (qi--)
+		cin >> n;
+
+		FOR(i, 1, n)
+			cin >> arr[i];
+
+		sort(arr + 1, arr + n + 1);
+
+		int lar = n, sma = 1;
+		int temp = n;
+
+		while (lar >= sma)
 		{
-			REP(i, r)
-				REP(j, c)
-				isBlack[i][j] = 0;
+			ans[temp--] = arr[lar--];
 
-			int x, y, d,count = 0;
-			cin >> x >> y >> d;
+			if (lar >= sma)
+				ans[temp--] = arr[sma++];
+		}
 
-			queue< pair<int, int> > q;
-
-			q.push(ii(x-1, y-1));
-
-			isBlack[x - 1][y - 1] = 1;
-
-			count++;
-
-			while (!q.empty())
-			{
-				ii pi = q.front();
-				q.pop();
-
-				REP(i, 4)
-				{
-					int newr = pi.first + ri[i];
-					int newc = pi.second + ci[i];
-
-					if (newr >= 0 && newr < r && newc >= 0 && newc < c)
-					{
-						if (!isBlack[newr][newc] && abs(mat[newr][newc]-mat[pi.first][pi.second])<=d)
-						{
-							isBlack[newr][newc] = 1;
-							count++;
-							q.push(ii(newr, newc));
-						}
-
-					}
-
-				}
-
+		int taste = 0;
+		for (int i = 2; i <= n; i++){
+			if (ans[i] - ans[i - 1] >= 0){
+				taste = taste + i*(ans[i] - ans[i - 1]);
 			}
+			else{
+				taste = taste + i*(ans[i - 1] - ans[i]);
+			}
+		}
 
-			
-			cout << count << "\n";
-
+		cout << taste << "\n";
 	}
-
-
+	
+	
 
 
 	return 0;
