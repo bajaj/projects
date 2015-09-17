@@ -52,7 +52,6 @@ typedef vector<ii> vii;
 #define cprintf(x) printf(" %d \n", x)
 
 
-
 int max(int a, int b)
 {
 	return a > b ? a : b;
@@ -65,17 +64,19 @@ int min(int a, int b)
 
 pair<LL, LL> arr2[1000005];
 
-LL counti[1000005];
+//LL counti[1000005];
 
-array<LL, 4> a[1000005];   // element,iprev,inext,count
+array<LL, 3> a[1000005];   // element,iprev,inext,count
 stack <ii> s;
 
 
 void populateCount(int point)
 {
-	counti[0] = 0;
+	//counti[0] = 0;
+	arr2[0].second = 0;
+
 	FOR(i, 1, point)
-		counti[i] = arr2[i].second + counti[i - 1];
+		arr2[i].second += arr2[i - 1].second;
 
 }
 
@@ -114,9 +115,9 @@ int removeDuplicates(int n)
 	FOR(i, 1, n)
 	{
 		if (a[i][0] == a[i - 1][0])
-			arr2[j - 1].second += a[i][3];
+			arr2[j - 1].second += (i - a[i][1]) * (a[i][2] - i);
 		else
-			arr2[j++] = ii(a[i][0],a[i][3]);
+			arr2[j++] = ii(a[i][0], (i - a[i][1]) * (a[i][2] - i));
 
 	}
 	return j;
@@ -156,7 +157,7 @@ int main()
 		while (ele.first <= a[x][0])
 		{
 			a[ele.second][2] = x;  // setting inext
-			a[ele.second][3] = (ele.second - a[ele.second][1]) * (a[ele.second][2] - ele.second);
+		//	a[ele.second][3] = (ele.second - a[ele.second][1]) * (a[ele.second][2] - ele.second);
 			
 			if (!s.empty())
 					s.pop();
@@ -193,23 +194,23 @@ int main()
 		if (comp == '=')
 		{
 			if (arr2[index].first == k)
-				Nocount = counti[index] - counti[index - 1];
+				Nocount = arr2[index].second - arr2[index - 1].second;
 			else
 				Nocount = 0;
 		}
 		else if (comp == '>')
 		{
 			if (arr2[index].first <= k)
-				Nocount = counti[point] - counti[index];
+				Nocount = arr2[point].second - arr2[index].second;
 			else
-				Nocount = counti[point] - counti[index - 1];
+				Nocount = arr2[point].second - arr2[index - 1].second;
 		}
 		else if (comp == '<')
 		{
 			if (arr2[index].first >= k)
-				Nocount = counti[index - 1];
+				Nocount = arr2[index - 1].second;
 			else
-				Nocount = counti[index];
+				Nocount = arr2[index].second;
 		}
 
 		if (Nocount % 2 == 0)  //even

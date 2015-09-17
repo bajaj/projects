@@ -55,17 +55,47 @@ void printLink(node* temp)
 
 }
 
+node* reverse(node* headref,node** headref2)
+{
+	if (!headref)
+		return NULL;
+	
+	node* tail = reverse(headref->next,headref2);
+
+	if (tail)
+		tail->next = headref;
+	else
+		*headref2 = headref;
+
+
+	headref->next = NULL;
+	return headref;
+
+}
+
+
 int main()
 {
-	node* head = new node(1);
+/*	node* head = new node(1);
 	head->next = new node(2); head->next->next = new node(3);// ->next = new node(4);
 
 	head->down = new node(7);
 	head->next->down= new node(8);
 	
 	node* tail=convert(head);
+	*/
 
+	node* head = new node(1);
+	head->next = new node(2); head->next->next = new node(3);
 	printLink(head);
+
+	cout << "\n";
+
+	node* temp;
+
+	reverse(head,&temp);
+	printLink(temp);
+
 
 	return 0;
 }
